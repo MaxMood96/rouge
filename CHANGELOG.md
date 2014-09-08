@@ -1,3 +1,77 @@
+## version 1.6.2: 2014-08-16
+
+  * swift: updates for beta 5 (thanks @radex!)
+
+## version 1.6.1: 2014-07-26
+
+  * hotfix release for common lisp, php, objective c, and qml lexers
+
+## version 1.6.0: 2014-07-26
+
+  * haml: balance braces in interpolation
+  * new lexer: slim (thanks @knutaldrin and @greggroth!)
+  * javascript: inner tokens in regexes are now lexed, as well as improvments to
+    the block / object distinction.
+
+## version 1.5.1: 2014-07-13
+
+  * ruby bugfixes for symbol edgecases and one-letter constants
+  * utf-8 all of the things
+  * update all builtins
+  * rust: add `box` keyword and associated builtins
+
+## version 1.5.0: 2014-07-11
+
+  * new lexer: swift (thanks @totocaster!)
+  * update elixir for new upstream features (thanks @splattael!)
+  * ruby bugfixes:
+    - add support for method calls with trailing dots
+    - fix for `foo[bar] / baz` being highlighted as a regex
+  * terminal256 formatter: re-style each line - some platforms reset on each line
+
+## version 1.4.0: 2014-05-28
+
+  * breaking: wrap code in `<pre ...><code>...</code></pre>` if `:wrap` is not overridden
+    (thanks @Arcovion)
+  * Allow passing a theme name as a string to `:inline_theme` (thanks @Arcovion)
+  * Add `:start_line` option for html line numbers (thanks @sencer)
+  * List available themes in `rougify help style`
+
+## version 1.3.4: 2014-05-03
+
+  * New lexers:
+    - QML (thanks @seanchas116)
+    - Applescript (thanks @joshhepworth)
+    - Properties (thanks @pkuczynski)
+  * Ruby bugfix for `{ key: /regex/ }` (#134)
+  * JSON bugfix: properly highlight null (thanks @zsalzbank)
+  * Implement a noop formatter for perf testing (thanks @splattael)
+
+## version 1.3.3: 2014-03-02
+
+  * prolog bugfix: was raising an error on some inputs (#126)
+  * python bugfix: was inconsistently highlighting keywords/builtins mid-word (#127)
+  * html formatter: always end output with a newline (#125)
+
+## version 1.3.2: 2014-01-13
+
+  * Now tested in Ruby 2.1
+  * C family bugfix: allow exponential floats without decimals (`1e-2`)
+  * cpp: allow single quotes as digit separators (`100'000'000`)
+  * ruby: highlight `%=` as an operator in the right context
+
+## version 1.3.1: 2013-12-23
+
+  * fill in some lexer descriptions and add the behat alias for gherkin
+
+## version 1.3.0: 2013-12-23
+
+  * assorted CLI bugfixes: better error handling, CGI-style options, no loadpath munging
+  * html: support multiline doctypes
+  * ocaml: bugfix for OO code: allows `#` as an operator
+  * inline some styles in tableized output instead of relying on the theme
+  * redcarpet: add overrideable `#rouge_formatter` for custom formatting options
+
 ## version 1.2.0: 2013-11-26
 
   * New lexers:

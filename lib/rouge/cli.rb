@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 # not required by the main lib.
 # to use this module, require 'rouge/cli'.
 
@@ -272,6 +274,9 @@ module Rouge
         yield %||
         yield %|options:|
         yield %|  --scope	(default: .highlight) a css selector to scope by|
+        yield %||
+        yield %|available themes:|
+        yield %|  #{Theme.registry.keys.sort.join(', ')}|
       end
 
       def self.parse(argv)
@@ -323,7 +328,7 @@ module Rouge
       def run
         puts "== Available Lexers =="
 
-        Lexer.all.each do |lexer|
+        Lexer.all.sort_by(&:tag).each do |lexer|
           desc = "#{lexer.desc}"
           if lexer.aliases.any?
             desc << " [aliases: #{lexer.aliases.join(',')}]"

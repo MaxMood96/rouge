@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*- #
+
 require 'rubygems'
 require 'bundler'
-Bundler.require
-require 'rouge'
+Bundler.require :development
 
 # stdlib
 require 'pathname'
@@ -39,7 +40,7 @@ class VisualTestApp < Sinatra::Application
   get '/:lexer' do |lexer_name|
     lexer_class = Rouge::Lexer.find(lexer_name)
     halt 404 unless lexer_class
-    @sample = File.read(SAMPLES.join(lexer_class.tag))
+    @sample = File.read(SAMPLES.join(lexer_class.tag), encoding: 'utf-8')
 
     lexer_options = {}
     params.each do |k, v|

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 module Rouge
   module Lexers
     class PHP < TemplateLexer
@@ -70,7 +72,7 @@ module Rouge
         rule /#.*?\n/, Comment::Single
         rule %r(//.*?\n), Comment::Single
         # empty comment, otherwise seen as the start of a docstring
-        rule %r(/\*\*/)
+        rule %r(/\*\*/), Comment::Multiline
         rule %r(/\*\*.*?\*/)m, Str::Doc
         rule %r(/\*.*?\*/)m, Comment::Multiline
         rule /(->|::)(\s*)([a-zA-Z_][a-zA-Z0-9_]*)/ do

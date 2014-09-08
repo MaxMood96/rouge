@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 module Rouge
   module Lexers
     class CSharp < RegexLexer
@@ -5,6 +7,8 @@ module Rouge
       aliases 'c#', 'cs'
       filenames '*.cs'
       mimetypes 'text/x-csharp'
+
+      desc 'a multi-paradigm language targeting .NET'
 
       # TODO: support more of unicode
       id = /@?[_a-z]\w*/i

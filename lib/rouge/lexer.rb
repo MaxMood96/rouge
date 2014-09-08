@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*- #
+
 # stdlib
 require 'strscan'
 require 'cgi'
+require 'set'
 
 module Rouge
   # @abstract
@@ -15,13 +18,6 @@ module Rouge
       # @see #lex
       def lex(stream, opts={}, &b)
         new(opts).lex(stream, &b)
-      end
-
-      def load_const(const_name, relpath)
-        return if Lexers.const_defined?(const_name)
-
-        root = Pathname.new(__FILE__).dirname.join('lexers')
-        load root.join(relpath)
       end
 
       def default_options(o={})
@@ -90,7 +86,7 @@ module Rouge
       def demo(arg=:absent)
         return @demo = arg unless arg == :absent
 
-        @demo = File.read(demo_file)
+        @demo = File.read(demo_file, encoding: 'utf-8')
       end
 
       # @return a list of all lexers.
@@ -296,7 +292,7 @@ module Rouge
 
       # @private
       def assert_utf8!(str)
-        return if %w(US-ASCII UTF-8).include? str.encoding.name
+        return if %w(US-ASCII UTF-8 ASCII-8BIT).include? str.encoding.name
         raise EncodingError.new(
           "Bad encoding: #{str.encoding.names.join(',')}. " +
           "Please convert your string to UTF-8."
@@ -425,6 +421,15 @@ module Rouge
     #   like {TextAnalyzer#shebang?} and {TextAnalyzer#doctype?}
     def self.analyze_text(text)
       0
+    end
+  end
+
+  module Lexers
+    def self.load_const(const_name, relpath)
+      return if const_defined?(const_name)
+
+      root = Pathname.new(__FILE__).dirname.join('lexers')
+      load root.join(relpath)
     end
   end
 end

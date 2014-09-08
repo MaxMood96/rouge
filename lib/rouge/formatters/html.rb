@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 # stdlib
 require 'cgi'
 
@@ -23,8 +25,13 @@ module Rouge
       # not) with the given `:css_class` unless `:wrap` is set to `false`.
       def initialize(opts={})
         @css_class = opts.fetch(:css_class, 'highlight')
+        @css_class = " class=#{@css_class.inspect}" if @css_class
+
         @line_numbers = opts.fetch(:line_numbers, false)
+        @start_line = opts.fetch(:start_line, 1)
         @inline_theme = opts.fetch(:inline_theme, nil)
+        @inline_theme = Theme.find(@inline_theme).new if @inline_theme.is_a? String
+
         @wrap = opts.fetch(:wrap, true)
       end
 
@@ -39,11 +46,9 @@ module Rouge
 
     private
       def stream_untableized(tokens, &b)
-        yield "<pre class=#{@css_class.inspect}>" if @wrap
-        tokens.each do |tok, val|
-          span(tok, val, &b)
-        end
-        yield '</pre>' if @wrap
+        yield "<pre><code#@css_class>" if @wrap
+        tokens.each{ |tok, val| span(tok, val, &b) }
+        yield "</code></pre>\n" if @wrap
       end
 
       def stream_tableized(tokens)
@@ -63,12 +68,11 @@ module Rouge
           span(Token::Tokens::Text::Whitespace, "\n") { |str| formatted << str }
         end
 
-        # generate a string of newline-separated line numbers for the gutter
-        numbers = num_lines.times.map do |x|
-          %<<pre class="lineno">#{x+1}</pre>>
-        end.join
+        # generate a string of newline-separated line numbers for the gutter>
+        numbers = %<<pre class="lineno">#{(@start_line..num_lines+@start_line-1)
+          .to_a.join("\n")}</pre>>
 
-        yield "<div class=#{@css_class.inspect}>" if @wrap
+        yield "<div#@css_class>" if @wrap
         yield '<table style="border-spacing: 0"><tbody><tr>'
 
         # the "gl" class applies the style for Generic.Lineno
@@ -82,8 +86,8 @@ module Rouge
         yield '</pre>'
         yield '</td>'
 
-        yield '</tr></tbody></table>'
-        yield '</div>' if @wrap
+        yield "</tr></tbody></table>\n"
+        yield "</div>\n" if @wrap
       end
 
       TABLE_FOR_ESCAPE_HTML = {

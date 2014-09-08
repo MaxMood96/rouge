@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 # this file is not require'd from the root.  To use this plugin, run:
 #
 #    require 'rouge/plugins/redcarpet'
@@ -15,11 +17,13 @@ module Rouge
           code.gsub! /^    /, "\t"
         end
 
-        formatter = Formatters::HTML.new(
-          :css_class => "highlight #{lexer.tag}"
-        )
-
+        formatter = rouge_formatter(lexer)
         formatter.format(lexer.lex(code))
+      end
+
+      # override this method for custom formatting behavior
+      def rouge_formatter(lexer)
+        Formatters::HTML.new(:css_class => "highlight #{lexer.tag}")
       end
     end
   end

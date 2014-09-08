@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 describe Rouge::Formatters::HTML do
   let(:subject) { Rouge::Formatters::HTML.new(options) }
   let(:options) { {} }
@@ -5,7 +7,7 @@ describe Rouge::Formatters::HTML do
 
   it 'formats a simple token stream' do
     out = subject.format([[Token['Name'], 'foo']])
-    assert { out == '<pre class="highlight"><span class="n">foo</span></pre>' }
+    assert { out == %(<pre><code class="highlight"><span class="n">foo</span></code></pre>\n) }
   end
 
   describe 'skipping the wrapper' do
@@ -40,7 +42,7 @@ describe Rouge::Formatters::HTML do
     let(:tokens) { Rouge::Lexers::Clojure.lex(text) }
 
     let(:output) { subject.format(tokens) }
-    let(:line_numbers) { output.scan(/<pre class="lineno"/).size }
+    let(:line_numbers) { output[%r[<pre class="lineno".*?</pre>]m].scan(/\d+/m).size }
 
     let(:output_code) {
       output =~ %r(<td class="code">(.*?)</td>)m

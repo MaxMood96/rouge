@@ -1,5 +1,4 @@
-# stdlib
-require 'set'
+# -*- coding: utf-8 -*- #
 
 module Rouge
   module Lexers
@@ -275,7 +274,7 @@ module Rouge
         end
 
         # path
-        rule /#p?"(\\.|[^"])*"/i
+        rule /#p?"(\\.|[^"])*"/i, Str::Symbol
 
         # reference
         rule /#\d+[=#]/, Operator

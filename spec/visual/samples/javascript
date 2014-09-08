@@ -3,21 +3,26 @@
 var myFloat = 0.123;
 var myOctal = 0x123;
 var myRegex = /asdf/;
+var myComplicatedRegex = /.[.](?=x\h\[[)])[^.{}abc]{foo}{3,}x{2,3}/
 var myObject = { a: 1, b: 2 }
 
-var ternary = 0 ? 1 : {a : 2 ? d : 3 };
-var ternary2 = a ? { b : c } + d : e;
+var ternary = 0 ? 1 : {object_key : 2 ? variable : 3 };
+var ternary2 = a ? { object_key : c } + variable : e;
 var ternary3 = a ? {
-  b : c,
-  d: e ? function() {
-    // TODO: if myLabel is on the first line, this is interpreted as
-    // an object...
-    myLabel:
+  key1 : var1,
+  key2: var2 ? function() {
+    label1: // break label, not an object key!
     while(true) {
       break myLabel;
     }
-  } + f: g
-}
+  } + var3: var4
+} : 2
+
+var obj =
+  {
+    // comment
+    key: val
+  }
 
 /*!
  * multiline comment
@@ -31,6 +36,12 @@ var quotedKeys = {
 
 Blag = {};
 jQuery.noConflict();
+
+if (cond)
+{
+  label1:
+  while (cond) break label1;
+}
 
 Blag.ReadMore = (function($) {
   function getFold(button) {
@@ -85,6 +96,11 @@ x = (a == b) ?/* this is a comment */ c : d;
 /// a comment //
 a = /regex//2/1; //syntactically correct, returns NaN
 
+// bad regexen - should have an error token at the last char and recover
+// on the next line
+var a = /foo
+var b = /[foo
+var c = /valid-regex/
 
 var template = "{{current}} of beer on the wall";
 var stanza = template.replace(/{{current}}/g, "99 bottles");
@@ -103,11 +119,9 @@ blah(1/2); //comment
 x = 1 / 2 / 3;
 x = 1/1/.1;
 
-// broken
-
-x=/1/;
-x=1/a/g;
-x=a/a/g;
+x=/1/; // regex
+x=1/a/g; // division
+x=a/a/g; // division
 
 // real-world
 

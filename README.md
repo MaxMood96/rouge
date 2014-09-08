@@ -1,6 +1,6 @@
 # Rouge
 
-[![Build Status](https://secure.travis-ci.org/jayferd/rouge.png)](http://travis-ci.org/jayferd/rouge)
+[![Build Status](https://secure.travis-ci.org/jneen/rouge.png)](http://travis-ci.org/jneen/rouge)
 [![Gem Version](https://badge.fury.io/rb/rouge.png)](http://badge.fury.io/rb/rouge)
 
 Rouge is a pure-ruby syntax highlighter.  It can highlight over 60 languages, and output HTML or ANSI 256-color text.  Its HTML output is compatible with stylesheets designed for [pygments][].
@@ -23,20 +23,48 @@ First, take a look at the [pretty colors][].
 ``` ruby
 # make some nice lexed html
 source = File.read('/etc/bashrc')
-formatter = Rouge::Formatters::HTML.new(:css_class => 'highlight')
+formatter = Rouge::Formatters::HTML.new(css_class: 'highlight')
 lexer = Rouge::Lexers::Shell.new
 formatter.format(lexer.lex(source))
 
 # Get some CSS
-Rouge::Themes::ThankfulEyes.render(:scope => '.highlight')
+Rouge::Themes::Base16.mode(:light).render(scope: '.highlight')
+# Or use Theme#find with string input
+Rouge::Theme.find('base16.light').render(scope: '.highlight')
 ```
 
-Rouge aims to be simple to extend, and to be a drop-in replacement pygments, with the same quality of output.
+####Full options:
 
-Also, Rouge ships with a `rougify` command which allows you to easily highlight files in your terminal: 
+Formatter options:
+
+      css_class: 'highlight'  #  Apply a class to the syntax-highlighted output.
+                              #  Set to false to not apply any css class
+      line_numbers: false     #  Generate line numbers.
+      start_line: 1           #  Index to start line numbers.
+      inline_theme: nil       #  A Rouge::CSSTheme used to highlight the output with inline styles
+                              #  instead of classes. Allows string inputs (separate mode with a dot):
+                              #  %w[colorful github monokai monokai.sublime thankful_eyes base16
+                              #     base16.dark base16.light base16.solarized base16.monokai]
+      wrap: true              #  Wrap the highlighted content in a container.
+                              #  Defaults to <pre><code>, or <div> if line numbers are enabled.
+
+Lexer options:
+
+      debug: false            #  Print a trace of the lex on stdout
+      parent: ''              #  Allows you to specify which language the template is inside
+
+CSS theme options:
+
+      scope: '.highlight'     #  CSS selector that styles are applied to
+                              #  E.g. Rouge::Themes::Monokai.mode(:sublime).render(scope: 'code')
+
+Rouge aims to be simple to extend, and to be a drop-in replacement for pygments, with the same quality of output.
+
+Also, Rouge ships with a `rougify` command which allows you to easily highlight files in your terminal:
 
 ``` bash
 $ rougify foo.rb
+$ rougify style monokai.sublime > syntax.css
 ```
 
 ### Advantages to pygments.rb
@@ -50,6 +78,7 @@ $ rougify foo.rb
 ## You can even use it with Redcarpet
 
 ``` ruby
+require 'redcarpet'
 require 'rouge'
 require 'rouge/plugins/redcarpet'
 
@@ -66,6 +95,7 @@ Rouge is only for UTF-8 strings.  If you'd like to highlight a string with a dif
 
 ## Other integrations
 
+* Middleman: [middleman-syntax](https://github.com/middleman/middleman-syntax) (@bhollis)
 * Middleman: [middleman-rouge][] (@Linuus)
 * RDoc: [rdoc-rouge][] (@zzak)
 

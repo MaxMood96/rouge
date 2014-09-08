@@ -1,9 +1,22 @@
+# -*- coding: utf-8 -*- #
+
 describe Rouge::Lexers::HTML do
   let(:subject) { Rouge::Lexers::HTML.new }
   include Support::Lexing
 
   it 'lexes embedded script tags' do
     assert_no_errors '<script>x && x < y;</script>'
+  end
+
+  describe 'lexing' do
+    include Support::Lexing
+
+    describe 'element names' do
+      it 'allow dashes to support custom elements' do
+        assert_tokens_equal '<custom-element></custom-element>',
+                            ['Name.Tag', '<custom-element></custom-element>']
+      end
+    end
   end
 
   describe 'guessing' do

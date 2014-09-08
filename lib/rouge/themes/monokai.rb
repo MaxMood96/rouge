@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 module Rouge
   module Themes
     class Monokai < CSSTheme
@@ -19,6 +21,8 @@ module Rouge
       palette :soft_yellow    => '#e6db74'
       palette :very_dark      => '#1e0010'
       palette :whitish        => '#f8f8f2'
+      palette :orange         => '#f6aa11'
+      palette :white          => '#ffffff'
 
       style Comment,
             Comment::Multiline,

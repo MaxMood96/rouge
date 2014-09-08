@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*- #
+
 module Rouge
   module Lexers
-    Lexer.load_const :SassCommon, 'sass/common.rb'
+    load_const :SassCommon, 'sass/common.rb'
 
     class Scss < SassCommon
       desc "SCSS stylesheets (sass-lang.com)"

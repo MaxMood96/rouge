@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*- #
+
 module Rouge
   module Formatters
     # A formatter for 256-color terminals
@@ -19,7 +21,7 @@ module Rouge
         tokens.each do |tok, val|
           escape = escape_sequence(tok)
           yield escape.style_string
-          yield val
+          yield val.gsub("\n", "\n#{escape.style_string}")
           yield escape.reset_string
         end
       end
@@ -126,11 +128,14 @@ module Rouge
           hexes.map { |h| h.to_i(16) }
         end
 
+        # max distance between two colors, #000000 to #ffffff
+        MAX_DISTANCE = 257 * 257 * 3
+
         def self.closest_color(r, g, b)
           @@colors_cache ||= {}
           key = (r << 16) + (g << 8) + b
           @@colors_cache.fetch(key) do
-            distance = 257 * 257 * 3 # (max distance, from #000000 to #ffffff)
+            distance = MAX_DISTANCE
 
             match = 0
 
