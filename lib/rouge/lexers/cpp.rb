@@ -2,9 +2,10 @@
 
 module Rouge
   module Lexers
-    load_const :C, 'c.rb'
+    load_lexer 'c.rb'
 
     class Cpp < C
+      title "C++"
       desc "The C++ programming language"
 
       tag 'cpp'
@@ -13,7 +14,8 @@ module Rouge
       filenames '*.cpp', '*.hpp',
                 '*.c++', '*.h++',
                 '*.cc',  '*.hh',
-                '*.cxx', '*.hxx'
+                '*.cxx', '*.hxx',
+                '*.pde', '*.ino'
       mimetypes 'text/x-c++hdr', 'text/x-c++src'
 
       def self.keywords

@@ -13,10 +13,23 @@ var ternary3 = a ? {
   key2: var2 ? function() {
     label1: // break label, not an object key!
     while(true) {
-      break myLabel;
+      break label1;
     }
-  } + var3: var4
+
+    label2: // also a break label
+    while (true) {
+      break label2;
+    }
+  } + var3: var4, // ternary, not object key
+  key3: 'foo'
 } : 2
+
+var a = {
+  num: 0,
+  func: function() {},
+  str: '',
+  bool: true
+}
 
 var obj =
   {
@@ -127,3 +140,12 @@ x=a/a/g; // division
 
 var x = 1/(1+Math.sqrt(sum)); // convert to number between 1-0
 return Math.round((num / den) * 100)/100;
+
+// generator
+function* range(from, to)
+{
+  to++;
+  while (from > to) {
+    yield from++;
+  }
+}

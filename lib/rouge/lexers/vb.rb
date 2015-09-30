@@ -3,10 +3,11 @@
 module Rouge
   module Lexers
     class VisualBasic < RegexLexer
+      title "Visual Basic"
       desc "Visual Basic"
       tag 'vb'
       aliases 'visualbasic'
-      filenames '*.vbs'
+      filenames '*.vbs', '*.vb'
       mimetypes 'text/x-visualbasic', 'application/x-visualbasic'
 
       def self.keywords
@@ -161,4 +162,3 @@ module Rouge
     end
   end
 end
-

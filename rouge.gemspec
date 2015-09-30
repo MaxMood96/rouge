@@ -10,9 +10,9 @@ Gem::Specification.new do |s|
     Rouge aims to a be a simple, easy-to-extend drop-in replacement
     for pygments.
   desc
-  s.homepage = "http://github.com/jneen/rouge"
+  s.homepage = "http://rouge.jneen.net/"
   s.rubyforge_project = "rouge"
-  s.files = Dir['Gemfile', 'LICENSE', 'rouge.gemspec', 'lib/**/*.rb', 'bin/rougify', 'lib/rouge/demos/*']
+  s.files = Dir['Gemfile', 'LICENSE', 'rouge.gemspec', 'lib/**/*.rb', 'lib/**/*.yml', 'bin/rougify', 'lib/rouge/demos/*']
   s.executables = %w(rougify)
   s.license = 'MIT (see LICENSE file)'
 end

@@ -1,4 +1,5 @@
 import Foundation
+@testable import MyModule
 
 func sayHello(person:String) -> String {
     return "Hello, \(capitalize(word:person)). \"How're are you doin\'?\""
@@ -13,11 +14,21 @@ sayHello("Toto")
 
 var pi = 3.1415
 
+var foo = cast as SomeType
+var foo = optionalCast as? SomeType
+var foo = forcedCast as! SomeType
+
 func halfOpenRangeLength(start:Int, end:Int) -> Int {
     return end - start
 }
 
 halfOpenRangeLength(3, 8)
+
+if let var = option {
+    if more && complex, let optional = binding, example = here where option.foo == example.foo {
+        // things
+    }
+}
 
 func count(string:String) -> (vowels:Int, consonants:Int, others:Int) {
     var vowels = 0, consonants = 0, emoji = 0, whitespace = 0, others = 0
@@ -163,10 +174,20 @@ let incrementor = makeIncrementor(firstNumber: 4)
 incrementor()
 
 // @autoclosure
-func simpleAssert(condition: @autoclosure () -> Bool, message: String = "Assertion failed") {
+func simpleAssert(@autoclosure condition: () -> Bool, message: String = "Assertion failed") {
     if !condition() {
         println(message)
     }
+}
+
+func lazyAssertion(@autoclosure(escaping) condition: () -> Bool, message: String = "") {
+    lazyAssertions.append(condition)
+}
+
+func autoreleasepool(@noescape code: () -> ()) {
+    pushAutoreleasePool()
+    code()
+    popAutoreleasePool()
 }
 
 // optional function call
@@ -174,6 +195,44 @@ func simpleAssert(condition: @autoclosure () -> Bool, message: String = "Asserti
 let maybeFunction: (() -> ())? = nil
 maybeFunction?()
 maybeFunction!()
+
+// Swift 2 exceptions
+
+func throwingFunction() throws -> String {
+    throw ErrorType.Error
+}
+
+do {
+    try throwingFunction()
+} catch {
+    println(error)
+}
+
+try! throwingFunction()
+
+func rethrowingFunction(f: T throws -> U) rethrows -> U {}
+
+// other swift 2 stuff
+
+guard let x = optionalValue else {
+   print("Fail")
+   throw NSError(domain: "", code: 0, userInfo: nil)
+}
+
+defer { callback() }
+
+if case let x? = optionalValue {print("Unwrapped: \(x)")}
+
+repeat {
+    // loop…
+} while condition
+
+if #available(iOS 8.0, OSX 10.10, *) {
+   // Use Handoff APIs when available.
+   let activity = NSUserActivity(activityType:"com.example.ShoppingList.view")
+} else {
+    // Fall back when Handoff APIs not available.
+}
 
 //MARK: Classes
 public class Person : NSObject {
@@ -219,8 +278,16 @@ public class Person : NSObject {
 
 //MARK: Protocols
 @objc protocol Random {
+    typealias T: SomeConstraint
     func random() -> Self
     optional func seed(seed: Int)
+    required func foo()
+}
+
+extension SomeProtocol where T: OtherProtocol {
+    func blah() {
+        // default implementation
+    }
 }
 
 extension SomeClass {
@@ -239,3 +306,23 @@ enum State: Equatable {
 }
 
 @availability(OSX, introduced=10.10) func localizedCaseInsensitiveContainsString(aString: String) -> Bool
+
+//MARK: Conditional compilation
+#if os(iOS)
+    sayHello("iOS")
+    #if arch(arm)
+        typealias View = UIView
+    #elseif arch(arm64)
+        typealias View = UIView64
+    #endif
+#elseif os(OSX)
+    /* Uncomment this when the Mac goes 64bit
+    #if arch(i386)
+        typealias View = NSView
+    #elseif arch(x86_64)
+        typealias View = NSView64
+    #endif
+    */
+#endif
+
+foo() // end-of-file comment

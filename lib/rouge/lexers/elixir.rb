@@ -5,9 +5,11 @@ module Rouge
     # Direct port of pygments Lexer.
     # See: https://bitbucket.org/birkenfeld/pygments-main/src/7304e4759ae65343d89a51359ca538912519cc31/pygments/lexers/functional.py?at=default#cl-2362
     class Elixir < RegexLexer
+      title "Elixir"
       desc "Elixir language (elixir-lang.org)"
 
       tag 'elixir'
+      aliases 'elixir', 'exs'
 
       filenames '*.ex', '*.exs'
 

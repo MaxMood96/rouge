@@ -3,6 +3,7 @@
 module Rouge
   module Lexers
     class Matlab < RegexLexer
+      title "MATLAB"
       desc "Matlab"
       tag 'matlab'
       aliases 'm'
@@ -52,7 +53,7 @@ module Rouge
 
         rule %r{[(){};:,\/\\\]\[]}, Punctuation
 
-        rule /~=|==|<<|>>|[-~+\/*%=<>&^|.]/, Operator
+        rule /~=|==|<<|>>|[-~+\/*%=<>&^|.@]/, Operator
 
 
         rule /(\d+\.\d*|\d*\.\d+)(e[+-]?[0-9]+)?/i, Num::Float
@@ -60,7 +61,8 @@ module Rouge
         rule /\d+L/, Num::Integer::Long
         rule /\d+/, Num::Integer
 
-        rule /'/, Str::Single, :string
+        rule /'(?=(.*'))/, Str::Single, :string
+        rule /'/, Operator
       end
 
       state :string do

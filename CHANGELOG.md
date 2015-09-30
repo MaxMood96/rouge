@@ -1,3 +1,126 @@
+## version 1.10.1: 2015-09-10
+
+  * diff: fix deleted lines which were not being highlighted (thanks @DouweM)
+
+## version 1.10.0: 2015-09-10
+  * fix warnings on files being loaded multiple times
+  * swift: (thanks @radex)
+    - new keywords
+    - support all `@`-prefixed attributes
+    - add support for `try!` and `#available(...)`
+  * bugfix: Properly manage `#style_for` precedence for terminal and inline formatters (thanks @mojavelinux)
+  * visual basic: recognize `*.vb` files (thanks @naotaco)
+  * common-lisp:
+    - add `elisp` as an alias (todo: make a real elisp lexer) (thanks @tejasbubane)
+    - bugfix: fix crash on array and structure literals
+  * new lexer: praat (thanks @jjatria)
+  * rust: stop recognizing `*.rc` (thanks @maximd)
+  * matlab: correctly highlight `'` (thanks @miicha)
+
+## version 1.9.1: 2015-07-13
+
+  * new lexer: powershell (thanks @aaroneg!)
+  * new lexer: tulip
+  * bugfix: pass opts through so lex(continue: true) retains them (thanks @stanhu!)
+  * c#: bugfix: don't error on unknown states in the C# lexer
+  * php: match drupal file extensions (thanks @rumpelsepp!)
+  * prolog: allow camelCase atoms (thanks @mumuki!)
+  * c: bugfix: was dropping text in function declarations (thanks @JonathonReinhart!)
+  * groovy: bugfix: allow comments at eof without newline
+
+## version 1.9.0: 2015-05-19
+
+  * objc: add array literals (thanks @mehowte)
+  * slim: reset ruby and html lexers, be less eager with guessing, detect html entities (thanks @elstgav)
+  * js: add `yield` as a keyword (thanks @honzabrecka)
+  * elixir: add alias `exs` (thanks @ismaelga)
+  * json: lex object keys as `Name::Tag` (thanks @morganjbruce)
+  * swift: add support for `@noescape` and `@autoclosure(escaping)` (thanks @radex)
+    and make `as?` and `as!` look better
+  * sass/scss: add support for `@each`, `@return`, `@media`, and `@function`
+    (thanks @i-like-robots)
+  * diff: make the whole thing more forgiving and less buggy (thanks @rumpelsepp)
+  * c++: add arduino file mappings and also Berksfile (thanks @Razer6)
+  * liquid: fix #237 which was dropping content (thanks @RadLikeWhoa)
+  * json: add json-api mime type (thanks @brettchalupa)
+
+  * new lexer: glsl (thanks @sriharshachilakapati)
+  * new lexer: json-doc, which is like JSON but supports comments and ellipsis (thanks @textshell)
+
+  * add documentation to the `--formatter` option in `rougify help` (thanks @mjbshaw)
+  * new website! http://rouge.jneen.net/ (thanks @edwardloveall!)
+
+
+## version 1.8.0: 2015-02-01
+
+  * css: fix "empty range in char class" bug and improve id/class name matches (#227/#228).
+    Thanks @elstgav!
+  * swift: add `@objc_block` and fix eof comments (#226).  Thanks @radex!
+  * new lexer: liquid (#224).  Thanks @RadLikeWhoa!
+  * cli: add `-v` flag to print version (#225).  Thanks @RadLikeWhoa!
+  * ruby: add `alias_method` as a builtin (#223).  Thanks @kochd!
+  * more conservative guessing for R, eliminate the `.S` extension
+  * new theme: molokai (#220).  Thanks @kochd!
+  * allow literate haskell that doesn't end in eof
+  * add human-readable "title" attribute to lexers (#215).  Thanks @edwardloveall!
+  * swift: add support for preprocessor macros (#201).  Thanks @mipsitan!
+
+## version 1.7.7: 2014-12-24
+
+  * fix previous bad release: actually add yaml files to the gem
+
+## version 1.7.5: 2014-12-24
+
+  lexer fixes and tweaks:
+  * javascript: fix function literals in object literals (reported by @taye)
+  * css: fix for percentage values and add more units (thanks @taye)
+  * ruby: highlight `require_relative` as a builtin (thanks @NARKOZ)
+
+  new lexers:
+  * nim (thanks @singularperturbation)
+  * apache (thanks @iiska)
+
+  new filetype associations:
+  * highlight PKGBUILD as shell (thanks @rumpelsepp)
+  * highlight Podspec files as ruby (thanks @NARKOZ)
+
+  other:
+  * lots of doc work in the README (thanks @rumpelsepp)
+
+
+## version 1.7.4: 2014-11-23
+
+  * clojure: hotfix for namespaced keywords with `::`
+  * background fix: add css class to pre tag instead of code tag (#191)
+  * new name in readme and license
+  * new contributor code of conduct
+
+## version 1.7.3: 2014-11-15
+
+  * ruby: hotfix for symbols in method calling position (rubyyyyy.......)
+  * http: add PATCH as a verb
+  * new lexer: Dart (thanks @R1der!)
+  * null formatter now prints token names and values
+
+## version 1.7.2: 2014-10-04
+
+  * ruby: hotfix for division with no space
+
+## version 1.7.1: 2014-09-18
+
+  * ruby: hotfix for the `/=` operator
+
+## version 1.7.0: 2014-09-18
+
+  * ruby: give up on trying to highlight capitalized builtin methods
+  * swift: updates for beta 6 (thanks @radex!) (#174, #172)
+  * support ASCII-8BIT encoding found on macs, as it's a subset of UTF-8 (#178)
+  * redcarpet plugin [BREAKING]: change `#rouge_formatter`'s override pattern
+    - it is now a method that takes a lexer and returns a formatter, instead of
+      a hash of generated options. (thanks @vince-styling!)
+  * java: stop erroneously highlighting keywords within words (thanks @koron!) (#177)
+  * html: dash is allowed in tag names (thanks @tjgrathwell!) (#173)
+
 ## version 1.6.2: 2014-08-16
 
   * swift: updates for beta 5 (thanks @radex!)
@@ -84,7 +207,7 @@
   * Updated PHP builtins
   * CLI now responds to `rougify --version`
 
-[#114]: https://github.com/jayferd/rouge/pull/114
+[#114]: https://github.com/jneen/rouge/pull/114
 
 ## version 1.1.0: 2013-11-04
 
@@ -148,7 +271,7 @@
   * Tokens are now constants, rather than strings.  This only affects
     you if you've written a custom lexer, formatter, or theme.
 
-[perf-0.5]: https://github.com/jayferd/rouge/pull/41#issuecomment-23561787
+[perf-0.5]: https://github.com/jneen/rouge/pull/41#issuecomment-23561787
 
 ## version 0.4.0: 2013-08-14
 

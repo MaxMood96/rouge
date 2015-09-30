@@ -3,9 +3,10 @@
 module Rouge
   module Lexers
     class CommonLisp < RegexLexer
+      title "Common Lisp"
       desc "The Common Lisp variant of Lisp (common-lisp.net)"
       tag 'common_lisp'
-      aliases 'cl', 'common-lisp'
+      aliases 'cl', 'common-lisp', 'elisp', 'emacs-lisp'
 
       filenames '*.cl', '*.lisp', '*.el' # used for Elisp too
       mimetypes 'text/x-common-lisp'
@@ -269,7 +270,7 @@ module Rouge
 
         # arrays and structures
         rule /(#(?:\d+a|s))(\()/i do
-          groups Literal::Other, Punctuation
+          groups Str::Other, Punctuation
           push :root
         end
 

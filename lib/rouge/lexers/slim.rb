@@ -7,6 +7,7 @@ module Rouge
     class Slim < RegexLexer
       include Indentation
 
+      title "Slim"
       desc 'The Slim template language'
 
       tag 'slim'
@@ -18,11 +19,6 @@ module Rouge
 
       # Since you are allowed to wrap lines with a backslash, include \\\n in characters
       dot = /(\\\n|.)/
-
-      def self.analyze_text(text)
-        return 1 if text.start_with? 'doctype'
-        return 1 if text =~ /(\*)(\{.+?\})/ # Contans a hash splat
-      end
 
       def ruby
         @ruby ||= Ruby.new(options)
@@ -44,6 +40,8 @@ module Rouge
           'sass' => Sass.new(options)
         }
       end
+
+      start { ruby.reset!; html.reset! }
 
       state :root do
         rule /\s*\n/, Text
@@ -145,19 +143,22 @@ module Rouge
           delegate ruby, m[2]
         end
 
+        # HTML Entities
+        rule(/&\S*?;/, Name::Entity)
+
         rule /#{dot}+?/, Text
 
         rule /\s*\n/, Text::Whitespace, :pop!
       end
 
       state :css do
-        rule(/\.\w+/) { token Name::Class; goto :tag }
-        rule(/#\w+/) { token Name::Function; goto :tag }
+        rule(/\.[\w-]*/) { token Name::Class; goto :tag }
+        rule(/#[a-zA-Z][\w:-]*/) { token Name::Function; goto :tag }
       end
 
       state :html_attr do
         # Strings, double/single quoted
-        rule %r(\s*(['"])#{dot}*\1), Literal::String, :pop!
+        rule(/\s*(['"])#{dot}*?\1/, Literal::String, :pop!)
 
         # Ruby stuff
         rule(/(#{ruby_chars}+\(.*?\))/) { |m| delegate ruby, m[1]; pop! }
@@ -194,6 +195,9 @@ module Rouge
         rule %r((</?[\w\s\=\'\"]+?/?>)) do |m| # Dirty html
           delegate html, m[1]
         end
+
+        # HTML Entities
+        rule(/&\S*?;/, Name::Entity)
 
         #rule /([^#\n]|#[^{\n]|(\\\\)*\\#\{)+/ do
         rule /#{dot}+?/, Text

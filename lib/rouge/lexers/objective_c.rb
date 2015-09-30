@@ -2,10 +2,11 @@
 
 module Rouge
   module Lexers
-    load_const :C, 'c.rb'
+    load_lexer 'c.rb'
 
     class ObjectiveC < C
       tag 'objective_c'
+      title "Objective-C"
       desc 'an extension of C commonly used to write Apple software'
       aliases 'objc'
       filenames '*.m', '*.h'
@@ -78,6 +79,7 @@ module Rouge
 
         rule /[?]/, Punctuation, :ternary
         rule /\[/,  Punctuation, :message
+        rule /@\[/, Punctuation, :array_literal
       end
 
       state :ternary do
@@ -112,6 +114,12 @@ module Rouge
         end
 
         mixin :message_shared
+      end
+
+      state :array_literal do
+        rule /]/, Punctuation, :pop!
+        rule /,/, Punctuation
+        mixin :statements
       end
 
       state :classname do
@@ -187,4 +195,3 @@ module Rouge
     end
   end
 end
-

@@ -3,12 +3,13 @@
 module Rouge
   module Lexers
     class Ruby < RegexLexer
+      title "Ruby"
       desc "The Ruby programming language (ruby-lang.org)"
       tag 'ruby'
       aliases 'rb'
-      filenames '*.rb', '*.ruby', '*.rbw', '*.rake', '*.gemspec',
-                'Rakefile', 'Guardfile', 'Gemfile', 'Capfile',
-                'Vagrantfile', '*.ru', '*.prawn'
+      filenames '*.rb', '*.ruby', '*.rbw', '*.rake', '*.gemspec', '*.podspec',
+                'Rakefile', 'Guardfile', 'Gemfile', 'Capfile', 'Podfile',
+                'Vagrantfile', '*.ru', '*.prawn', 'Berksfile'
 
       mimetypes 'text/x-ruby', 'application/x-ruby'
 
@@ -16,7 +17,7 @@ module Rouge
         return 1 if text.shebang? 'ruby'
       end
 
-      state :sigil_strings do
+      state :symbols do
         # symbols
         rule %r(
           :  # initial :
@@ -30,7 +31,9 @@ module Rouge
 
         rule /:'(\\\\|\\'|[^'])*'/, Str::Symbol
         rule /:"/, Str::Symbol, :simple_sym
+      end
 
+      state :sigil_strings do
         # %-sigiled strings
         # %(abc), %[abc], %<abc>, %.abc., %r.abc., etc
         delimiter_map = { '{' => '}', '[' => ']', '(' => ')', '<' => '>' }
@@ -75,6 +78,7 @@ module Rouge
       end
 
       state :strings do
+        mixin :symbols
         rule /\b[a-z_]\w*?:\s+/, Str::Symbol, :expr_start
         rule /'(\\\\|\\'|[^'])*'/, Str::Single
         rule /"/, Str::Double, :simple_string
@@ -105,27 +109,26 @@ module Rouge
 
       keywords_pseudo = %w(
         initialize new loop include extend raise attr_reader attr_writer
-        attr_accessor attr catch throw private module_function public
-        protected true false nil __FILE__ __LINE__
+        attr_accessor alias_method attr catch throw private module_function
+        public protected true false nil __FILE__ __LINE__
       )
 
       builtins_g = %w(
-        Array Float Integer Str __id__ __send__ abort ancestors
-        at_exit autoload binding callcc caller catch chomp chop
-        class_eval class_variables clone const_defined\? const_get
-        const_missing const_set constants display dup eval exec exit
-        extend fail fork format freeze getc gets global_variables gsub
-        hash id included_modules inspect instance_eval instance_method
-        instance_methods instance_variable_get instance_variable_set
-        instance_variables lambda load local_variables loop method
-        method_missing methods module_eval name object_id open p
-        print printf private_class_method private_instance_methods
-        private_methods proc protected_instance_methods protected_methods
-        public_class_method public_instance_methods public_methods putc
-        puts raise rand readline readlines require scan select self send
-        set_trace_func singleton_methods sleep split sprintf srand sub
-        syscall system taint test throw to_a to_s trace_var trap untaint
-        untrace_var warn
+        __id__ __send__ abort ancestors at_exit autoload binding callcc
+        caller catch chomp chop class_eval class_variables clone
+        const_defined\? const_get const_missing const_set constants
+        display dup eval exec exit extend fail fork format freeze
+        getc gets global_variables gsub hash id included_modules
+        inspect instance_eval instance_method instance_methods
+        instance_variable_get instance_variable_set instance_variables
+        lambda load local_variables loop method method_missing
+        methods module_eval name object_id open p print printf
+        private_class_method private_instance_methods private_methods proc
+        protected_instance_methods protected_methods public_class_method
+        public_instance_methods public_methods putc puts raise rand
+        readline readlines require require_relative scan select self send set_trace_func
+        singleton_methods sleep split sprintf srand sub syscall system
+        taint test throw to_a to_s trace_var trap untaint untrace_var warn
       )
 
       builtins_q = %w(
@@ -212,7 +215,7 @@ module Rouge
         rule /[A-Z][a-zA-Z0-9_]*/, Name::Constant, :method_call
         rule /(\.|::)(\s*)([a-z_]\w*[!?]?|[*%&^`~+-\/\[<>=])/ do
           groups Punctuation, Text, Name::Function
-          push :expr_start
+          push :method_call
         end
 
         rule /[a-zA-Z_]\w*[?!]/, Name, :expr_start
@@ -330,7 +333,7 @@ module Rouge
       end
 
       state :string_intp do
-        rule /\#{/, Str::Interpol, :in_interp
+        rule /[#][{]/, Str::Interpol, :in_interp
         rule /#(@@?|\$)[a-z_]\w*/i, Str::Interpol
       end
 
@@ -342,15 +345,28 @@ module Rouge
       end
 
       state :method_call do
-        rule %r((\s+)(/)(?=\S|\s*/)) do
-          groups Text, Str::Regex
+        rule %r(/) do
+          token Operator
+          goto :expr_start
+        end
+
+        rule(//) { goto :method_call_spaced }
+      end
+
+      state :method_call_spaced do
+        mixin :whitespace
+
+        rule %r([%/]=) do
+          token Operator
+          goto :expr_start
+        end
+
+        rule %r((/)(?=\S|\s*/)) do
+          token Str::Regex
           goto :slash_regex
         end
 
-        rule /(\s*)(%=)/ do
-          groups Text, Operator
-          goto :expr_start
-        end
+        mixin :sigil_strings
 
         rule(%r((?=\s*/))) { pop! }
 

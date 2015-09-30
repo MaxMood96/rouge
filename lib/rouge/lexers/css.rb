@@ -3,6 +3,7 @@
 module Rouge
   module Lexers
     class CSS < RegexLexer
+      title "CSS"
       desc "Cascading Style Sheets, used to style web pages"
 
       tag 'css'
@@ -184,7 +185,7 @@ module Rouge
       state :root do
         mixin :basics
         rule /{/, Punctuation, :stanza
-        rule /:#{identifier}/, Name::Decorator
+        rule /:[:]?#{identifier}/, Name::Decorator
         rule /\.#{identifier}/, Name::Class
         rule /##{identifier}/, Name::Function
         rule /@#{identifier}/, Keyword, :at_rule
@@ -196,7 +197,7 @@ module Rouge
         mixin :basics
         rule /url\(.*?\)/, Str::Other
         rule /#[0-9a-f]{1,6}/i, Num # colors
-        rule /#{number}(?:em|px|%|pt|pc|in|mm|m|ex|s)?\b/, Num
+        rule /#{number}(?:%|(?:em|px|pt|pc|in|mm|cm|ex|rem|ch|vw|vh|vmin|vmax|dpi|dpcm|dppx|deg|grad|rad|turn|s|ms|Hz|kHz)\b)?/, Num
         rule /[\[\]():\/.,]/, Punctuation
         rule /"(\\\\|\\"|[^"])*"/, Str::Single
         rule /'(\\\\|\\'|[^'])*'/, Str::Double

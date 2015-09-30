@@ -10,16 +10,11 @@ describe Rouge::Lexers::Slim do
     it 'guesses by filename' do
       assert_guess :filename => 'foo.slim'
     end
+  end
 
-    it 'guesses by source' do
-      assert_guess :source => 'doctype html'
-
-      assert_guess :source => <<-source
-        html
-          body
-            p Some text
-            a *{ :href => "Somewhere" } Link to somewhere
-      source
+  describe 'regression: lexing heredocs' do
+    it 'doesn\'t throw an error' do
+      subject.lex('-<<x').to_a
     end
   end
 

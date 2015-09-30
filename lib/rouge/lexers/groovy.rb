@@ -3,6 +3,7 @@
 module Rouge
   module Lexers
     class Groovy < RegexLexer
+      title "Groovy"
       desc 'The Groovy programming language (groovy.codehaus.org)'
       tag 'groovy'
       filenames '*.groovy'
@@ -49,7 +50,7 @@ module Rouge
 
         # whitespace
         rule /[^\S\n]+/, Text
-        rule %r(//.*?\n), Comment::Single
+        rule %r(//.*?$), Comment::Single
         rule %r(/[*].*?[*]/)m, Comment::Multiline
         rule /@\w[\w\d.]*/, Name::Decorator
         rule /(class|interface)\b/,  Keyword::Declaration, :class

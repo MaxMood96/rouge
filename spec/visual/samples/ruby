@@ -2,12 +2,32 @@
 # ruby 1.9 examples
 #######
 
+state :foo do
+  rule %r(/) do
+    token Operator
+    goto :expr_start
+  end
+
+  rule(//) { goto :method_call_spaced }
+end
+
+state :foo do
+  rule %r(/), Thing
+end
+
 %i(this is an array of symbols)
 %I(this is too, but with #{@interpolation})
 hash = { answer: 42 }
 link_to 'new', new_article_path, class: 'btn'
 # not a symbol
 a ? b:c
+
+a/1 # comment
+a / b # comment
+a /1 \r[egex]\//
+a/ b #comment
+x.a / 1 # comment
+Foo::a / 3 + 4
 
 ########
 # method calls
@@ -257,6 +277,7 @@ end
 
 foo = 3
 foo %= 2
+foo /= 10 # not a regex
 
 conflicts = 0
 events.to_a.sort_by do |(day, daytime),|

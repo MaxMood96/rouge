@@ -4,10 +4,11 @@ module Rouge
   module Lexers
     class HTTP < RegexLexer
       tag 'http'
+      title "HTTP"
       desc 'http requests and responses'
 
       def self.methods
-        @methods ||= %w(GET POST PUT DELETE HEAD OPTIONS TRACE)
+        @methods ||= %w(GET POST PUT DELETE HEAD OPTIONS TRACE PATCH)
       end
 
       def content_lexer

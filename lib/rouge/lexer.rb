@@ -65,6 +65,14 @@ module Rouge
         lexer_class && lexer_class.new(opts)
       end
 
+      # Specify or get this lexer's title. Meant to be human-readable.
+      def title(t=nil)
+        if t.nil?
+          t = tag.capitalize
+        end
+        @title ||= t
+      end
+
       # Specify or get this lexer's description.
       def desc(arg=:absent)
         if arg == :absent
@@ -142,7 +150,7 @@ module Rouge
       #   other hints.
       #
       # @see Lexer.analyze_text
-      # @see Lexer.multi_guess
+      # @see Lexer.guesses
       def guess(info={})
         lexers = guesses(info)
 
@@ -368,7 +376,7 @@ module Rouge
     # @option opts :continue
     #   Continue the lex from the previous state (i.e. don't call #reset!)
     def lex(string, opts={}, &b)
-      return enum_for(:lex, string) unless block_given?
+      return enum_for(:lex, string, opts) unless block_given?
 
       Lexer.assert_utf8!(string)
 
@@ -425,8 +433,11 @@ module Rouge
   end
 
   module Lexers
-    def self.load_const(const_name, relpath)
-      return if const_defined?(const_name)
+    @_loaded_lexers = {}
+
+    def self.load_lexer(relpath)
+      return if @_loaded_lexers.key?(relpath)
+      @_loaded_lexers[relpath] = true
 
       root = Pathname.new(__FILE__).dirname.join('lexers')
       load root.join(relpath)

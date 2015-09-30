@@ -87,7 +87,7 @@ module Rouge
 
     def self.class_from_arg(arg)
       case arg
-      when 'version', '--version'
+      when 'version', '--version', '-v'
         Version
       when 'help'
         Help
@@ -164,6 +164,10 @@ module Rouge
         yield %[                            If not provided, rougify will try to guess]
         yield %[                            based on --mimetype, the filename, and the]
         yield %[                            file contents.]
+        yield %[]
+        yield %[--formatter|-f <opts>       specify the output formatter to use.]
+        yield %[                            If not provided, rougify will default to]
+        yield %[                            terminal256.]
         yield %[]
         yield %[--mimetype|-m <mimetype>    specify a mimetype for lexer guessing]
         yield %[]

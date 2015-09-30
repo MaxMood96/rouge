@@ -62,14 +62,17 @@ describe Rouge::Lexers::Ruby do
       assert_guess :filename => 'foo.ruby'
       assert_guess :filename => 'foo.rbw'
       assert_guess :filename => 'foo.gemspec'
+      assert_guess :filename => 'foo.podspec'
       assert_guess :filename => 'Rakefile'
       assert_guess :filename => 'Guardfile'
       assert_guess :filename => 'Gemfile'
       assert_guess :filename => 'foo.rake'
       assert_guess :filename => 'Capfile'
+      assert_guess :filename => 'Podfile'
       assert_guess :filename => 'Vagrantfile'
       assert_guess :filename => 'config.ru'
       assert_guess :filename => 'foo.pdf.prawn'
+      assert_guess :filename => 'Berksfile'
     end
 
     it 'guesses by mimetype' do

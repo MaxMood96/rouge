@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*- #
-
 module Rouge
   module Lexers
     class Diff < RegexLexer
-      desc "Lexes unified diffs or patches"
+      title 'diff'
+      desc 'Lexes unified diffs or patches'
 
       tag 'diff'
       aliases 'patch', 'udiff'
@@ -13,27 +12,19 @@ module Rouge
       def self.analyze_text(text)
         return 1   if text.start_with?('Index: ')
         return 1   if text.start_with?('diff ')
-
-        return 0.9 if text =~ /\A---.*?\n\+\+\+/m
-      end
-
-      state :header do
-        rule /^diff .*?\n(?=---|\+\+\+)/m, Generic::Heading
-        rule /^--- .*?\n/, Generic::Deleted
-        rule /^\+\+\+ .*?\n/, Generic::Inserted
-      end
-
-      state :diff do
-        rule /@@ -\d+,\d+ \+\d+,\d+ @@.*?\n/, Generic::Heading
-        rule /^\+.*?\n/, Generic::Inserted
-        rule /^-.*?\n/,  Generic::Deleted
-        rule /^ .*?\n/,  Text
-        rule /^.*?\n/,   Error
+        return 0.9 if text.start_with?('--- ')
       end
 
       state :root do
-        mixin :header
-        mixin :diff
+        rule(/^ .*\n/, Text)
+        rule(/^---\n/, Text)
+        rule(/^\+.*\n/, Generic::Inserted)
+        rule(/^-+.*\n/, Generic::Deleted)
+        rule(/^!.*\n/, Generic::Strong)
+        rule(/^@.*\n/, Generic::Subheading)
+        rule(/^([Ii]ndex|diff).*\n/, Generic::Heading)
+        rule(/^=.*\n/, Generic::Heading)
+        rule(/.*\n/, Text)
       end
     end
   end

@@ -40,7 +40,10 @@ load load_dir.join('rouge/lexer.rb')
 load load_dir.join('rouge/regex_lexer.rb')
 load load_dir.join('rouge/template_lexer.rb')
 
-Dir.glob(load_dir.join('rouge/lexers/*.rb')).each { |f| load f }
+lexers_dir = load_dir.join('rouge/lexers')
+Dir.glob(lexers_dir.join('*.rb')).each do |f|
+  Rouge::Lexers.load_lexer(Pathname.new(f).relative_path_from(lexers_dir).to_s)
+end
 
 load load_dir.join('rouge/formatter.rb')
 load load_dir.join('rouge/formatters/html.rb')
@@ -53,4 +56,5 @@ load load_dir.join('rouge/themes/colorful.rb')
 load load_dir.join('rouge/themes/base16.rb')
 load load_dir.join('rouge/themes/github.rb')
 load load_dir.join('rouge/themes/monokai.rb')
+load load_dir.join('rouge/themes/molokai.rb')
 load load_dir.join('rouge/themes/monokai_sublime.rb')
